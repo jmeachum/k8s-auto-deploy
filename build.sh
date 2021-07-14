@@ -40,7 +40,7 @@ terraform -chdir=terraform_files init
 terraform -chdir=terraform_files plan -var="ami_id=${AMI_ID}" -out=tfplan
 
 # Terraform apply
-terraform -chdir=terraform_files apply -var="ami_id=${AMI_ID}" tfplan
+terraform -chdir=terraform_files apply tfplan
 
 # TODO: Remove this block after testing. Sets back to default.
 # Revert back for testing name to backend.tf
