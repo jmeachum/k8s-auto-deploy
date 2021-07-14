@@ -1,0 +1,8 @@
+FROM centos/nodejs-10-centos7
+
+EXPOSE 3000
+
+ENV MONGODB_URL=mongodb://mongo:27017/database
+COPY . /opt/app-root/src/
+RUN npm install
+CMD npm start

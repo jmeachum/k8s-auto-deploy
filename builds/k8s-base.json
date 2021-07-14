@@ -1,0 +1,37 @@
+{
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "region": "us-east-1",
+            "instance_type": "t3.medium",
+            "ami_name": "k8s-base-{{timestamp}}",
+            "source_ami_filter": {
+                "filters": {
+                    "virtualization-type": "hvm",
+                    "name": "CentOS 7.9.2009 x86_64",
+                    "root-device-type": "ebs"
+                },
+                "owners": ["125523088429"],
+                "most_recent": true
+            },
+            "ssh_username": "centos",
+            "tags": {
+                "build-uuid": "{{user `build_uuid`}}"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "sudo yum install -y python3"
+            ]
+        },
+        {
+            "type": "ansible",
+            "playbook_file": "./builds/ansible_playbooks/k8s_base.yml",
+            "extra_arguments": ["-vvvv", "-b"],
+            "user": "centos"
+        }
+    ]
+}
