@@ -17,5 +17,6 @@ RUN wget -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/1.0.2/te
 # Install awscli
 RUN pip install awscli
 
+# REMOVE ONCE DEV IS DONE
 RUN git clone https://github.com/jmeachum/k8s-auto-deploy.git /k8s-auto-deploy &&\
     chmod +x /k8s-auto-deploy/build.sh
