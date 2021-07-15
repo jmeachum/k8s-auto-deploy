@@ -1,8 +1,29 @@
+# Create intermediate layer to copy source
+FROM centos:7 as intermediate
+LABEL stage=intermediate
+
+# Install git and clone repo
+RUN yum install git -y
+RUN git clone https://github.com/swimlane/devops-practical
+
+# Pull container for nodejs
 FROM centos/nodejs-10-centos7
 
+# Expose port to use for setting up bridge network
 EXPOSE 3000
 
+# Set connection string for mongo
 ENV MONGODB_URL=mongodb://mongo:27017/database
-COPY . /opt/app-root/src/
+
+# Copy all of the files from intermediate
+COPY --from=intermediate /devops-practical/app /opt/app-root/src/app/
+COPY --from=intermediate /devops-practical/config /opt/app-root/src/config/
+COPY --from=intermediate /devops-practical/public /opt/app-root/src/public/
+COPY --from=intermediate /devops-practical/package-lock.json /opt/app-root/src/
+COPY --from=intermediate /devops-practical/package.json /opt/app-root/src/
+COPY --from=intermediate /devops-practical/server.js /opt/app-root/src/
+
+# Install dependencies
 RUN npm install
+
 CMD npm start
